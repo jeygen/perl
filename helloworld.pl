@@ -11,6 +11,9 @@ print "Hello, World!\n";
 # This line prints the message "Hello, World!" to the console, followed by a newline character
 
 =pod
+
+pod and cut is for multiline comments
+
 To download and run the Perl interpreter:
 
 1. Go to the official Perl website at https://www.perl.org/.
