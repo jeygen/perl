@@ -1,5 +1,16 @@
 #!/usr/bin/perl
 
+# hash tables: %
+# scalars: $
+# arrays: @
+# my restricts scope to delcared block
+# < is read, > is write, >> append, +< read/write, +> r/w truncate 
+# die kills program with $! os warning
+# <blah> means read line by line
+# chomp removes \n 
+# =~ is regex operator
+# $1 captures value from regex operator
+
 use strict;
 use warnings;
 
