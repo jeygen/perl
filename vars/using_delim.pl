@@ -14,6 +14,8 @@ module Test;
 END_VERILOG
 
 # Automate creation of a certain number of registers
+# .= concat in perl
+# done need delim as appending loop
 for my $i (1..10) {
     $verilog_script .= "  reg [31:0] reg$i;\n";
 }
