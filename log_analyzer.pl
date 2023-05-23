@@ -44,7 +44,9 @@ while (my $line = <$file>) {
     }
 
     # Count number of words
+    # syntax split(/\s+/, $line) is cool
     my @words = split /\s+/, $line;
+    # scalar @ is for length of array
     $number_of_words += scalar @words;
 }
 
@@ -58,4 +60,5 @@ foreach my $type (qw(INFO WARNING ERROR)) {
 
 # Display total number of words
 print "Number of words: $number_of_words\n";
+
 
