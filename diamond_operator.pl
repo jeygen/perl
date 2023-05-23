@@ -1,7 +1,7 @@
 # Diamond operator also called an angle operator
 
 # Open a file for reading
-open my $fh, '<', 'filename.txt' or die "Cannot open file: $!";
+open (my $fh, '<', 'filename.txt') or die "Cannot open file: $!";
 
 # Read lines from the file
 # the $ tracks the line number
