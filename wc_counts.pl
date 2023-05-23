@@ -12,6 +12,7 @@ my %word_counts;
 while (my $line = <$fh>) {
     chomp $line;
     my @words = split /\s+/, $line;
+    # how to iterate through array
     foreach my $word (@words) {
         $word_counts{$word}++;
     }
@@ -21,6 +22,7 @@ close $fh;
 
 my $total_words = 0;
 
+# hot to itereate through hashmap
 foreach my $word (keys %word_counts) {
     my $count = $word_counts{$word};
     $total_words += $count;
