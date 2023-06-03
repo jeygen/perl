@@ -1,25 +1,11 @@
 # Open file and count the total and individual words
 
-my $total_words;
-my %num_per_words;
 
-open(my $wd, '<', 'log_syn1.txt') or die "no good with, $1";
+# Use regex to count occurence of a words: cat, catz, dog
 
-while (my $line = <$wd>) {
-	chomp $line;
-	my @words = split /\s+/, $line;
-	$total_words += scalar @words;
-	foreach my $w (@words) {
-		$num_per_words{$w}++;
-	}
-}
+# Write a script that reads a file and counts the number of lines, words, and characters.
+# Similar to the Unix 'wc' command.
 
-close($wd);
+# Given a server log file, write a script that identifies and prints the most common IP address.
+# This involves parsing and processing a potentially large text file.
 
-foreach my $key (keys %num_per_words) {
-    print "Key: $key, Value: $hashmap{$key}\n";
-}
-
-print "$total_words";
-
-# Use regex to count occurence of a word
