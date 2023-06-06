@@ -71,12 +71,14 @@ sub compare_opened_changes_with_diff2 {
         foreach my $opened_file (@opened_files) {
             my $depot_file = $opened_file->{'depotFile'};
             my $change = $opened_file->{'change'};
+            # fancy way to spilt into array then take the last element
             my $file_name = (split('/', $depot_file))[-1]; 
 
             my $diff2_command = "p4 diff2 //depot/.../$file_name //...@$change";
             my @diff2_result = `$diff2_command`;
 
             # Check for files with no match in depot
+            # Checks most recent system error, $? special char
             if ($? != 0) {
                 print "No match for $depot_file in depot.\n";
                 next;
@@ -98,6 +100,141 @@ sub compare_opened_changes_with_diff2 {
         # Print "perfect match" if no differences were found
         if ($no_diff && !$no_file_match) {
             print "Perfect match.\n";
+        }
+    };
+
+    if ($@) {
+        print "An error occurred: $@\n";
+    }
+
+    $p4->Disconnect();
+}
+
+### No message version #####
+
+sub compare_opened_changes_with_diff2 {
+    my $p4 = P4->new();
+    $p4->SetProg('p4');
+
+    eval {
+        $p4->Connect() or die("Failed to connect to Perforce server: " . $p4->Errors());
+
+        my $workspace = `p4 client -o | grep 'Root'`;
+        $workspace =~ s/Root:\s+//;
+
+        my @opened_files = $p4->RunOpened();
+
+        foreach my $opened_file (@opened_files) {
+            my $depot_file = $opened_file->{'depotFile'};
+            my $change = $opened_file->{'change'};
+            my $file_name = (split('/', $depot_file))[-1]; 
+
+            my $diff2_command = "p4 diff2 //depot/.../$file_name //...@$change";
+            my @diff2_result = `$diff2_command`;
+
+            # If there was a system error, skip this file
+            next if ($? != 0);
+
+            if (@diff2_result) {
+                print "Differences for $depot_file in changelist $change:\n";
+                foreach my $diff (@diff2_result) {
+                    print $diff;
+                }
+                print "\n";
+            }
+        }
+    };
+
+    if ($@) {
+        print "An error occurred: $@\n";
+    }
+
+    $p4->Disconnect();
+}
+
+################### I think this what would actually work ########
+
+sub compare_opened_changes_with_diff2 {
+    my $p4 = P4->new();
+    $p4->SetProg('p4');
+
+    # List of specific files to compare
+    my @specific_files = ('file1', 'file2', 'file3', 'file4', 'file5');
+
+    eval {
+        $p4->Connect() or die("Failed to connect to Perforce server: " . $p4->Errors());
+
+        my $client = $p4->GetClient(); # Get the client name
+
+        foreach my $file_name (@specific_files) {
+            # Assume the change list is the latest for each file
+            my $change = "latest";
+
+            # Get the content of the file from the other depot
+            my $print_command = "p4 print -q //other_depot/.../$file_name@$change";
+            my $other_content = `$print_command`;
+
+            # Get the local path of the file in your workspace
+            my $local_path = "//path/to/your/workspace/$file_name";
+
+            # Use a standard diff tool to compare the content
+            open my $fh, '<', $local_path or die "Can't open $local_path: $!";
+            my $local_content = do { local $/; <$fh> };
+            close $fh;
+
+            my $diff = Text::Diff::diff(\$other_content, \$local_content);
+            if ($diff ne '') {
+                print "Differences for $file_name in changelist $change:\n$diff\n";
+            }
+        }
+    };
+
+    if ($@) {
+        print "An error occurred: $@\n";
+    }
+    
+
+    
+    
+
+    $p4->Disconnect();
+}
+
+    #### this is faster ###
+
+sub compare_opened_changes_with_diff2 {
+    my $p4 = P4->new();
+    $p4->SetProg('p4');
+
+    # List of specific files to compare
+    my @specific_files = ('file1', 'file2', 'file3', 'file4', 'file5');
+
+    eval {
+        $p4->Connect() or die("Failed to connect to Perforce server: " . $p4->Errors());
+
+        my $client = $p4->GetClient(); # Get the client name
+
+        foreach my $file_name (@specific_files) {
+            # Assume the change list is the latest for each file
+            my $change = "latest";
+
+            # Get the content of the file from the other depot
+            my $print_command = "p4 print -o temp.txt //other_depot/.../$file_name@$change";
+            system($print_command);
+
+            # Get the local path of the file in your workspace
+            my $local_path = "//path/to/your/workspace/$file_name";
+
+            # Use an external diff tool to compare the content
+            my $diff_command = "diff temp.txt $local_path";
+            my $diff = `$diff_command`;
+
+            if ($diff ne '') {
+                print "Differences for $file_name in changelist $change:\n$diff\n";
+            }
+
+            # Delete the temporary file
+            unlink "temp.txt";
         }
     };
 
