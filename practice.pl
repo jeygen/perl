@@ -1,4 +1,44 @@
 # Open file and count the total and individual words
+ #!/usr/bin/perl
+        use strict;
+        use warnings;
+        
+        # The name of the file to open
+        my $filename = 'myfile.txt';
+        
+        # Open the file or exit with error message
+        open(my $fh, '<', $filename) or die "Could not open file '$filename' $!";
+        
+        # Initialize counters
+        my $total_count = 0;
+        my %word_counts;
+        
+        # Read the file line by line
+        while (my $row = <$fh>) {
+            chomp $row;
+            
+            # Split the line into words
+            my @words = split /\s+/, $row;
+            
+            # Increase the total count by the number of words on this line
+            $total_count += @words;
+        
+            # Increase the individual word counts
+            for my $word (@words) {
+                $word_counts{$word}++;
+            }
+        }
+        
+        # Close the file
+        close $fh;
+        
+        # Print the total word count
+        print "Total words: $total_count\n";
+        
+        # Print the counts for each individual word
+        for my $word (sort keys %word_counts) {
+            print "$word: $word_counts{$word}\n";
+        }
 
 
 # Use regex to count occurence of a words: cat, catz, dog
