@@ -87,16 +87,45 @@
 # Given a server log file, write a script that identifies and prints the most common IP address.
 # This involves parsing and processing a potentially large text file.
 
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+# We'll use a hash to count occurrences of each IP address
 my %ip_hash;
 
+# Open the file
 my $file_path = '~/learning_repos/perl/parse_me_files/ip_logs.txt';
-open(my $wf, '<', $file_path) or die "something baaaaad $!";
+open(my $fh, '<', $file_path) or die "Could not open file '$file_path' $!";
 
-while (my $line = <$wf>) {
-	chomp $line;
-	foreach ($line ~= m/\b\d+{1-3}\.\d+{1-3}.\d+{1-3}.\d+{1-3}\b) {
-		$ip_hash{$1}++;
-	}
+# Loop over each line in the file
+while (my $line = <$fh>) {
+    chomp $line;
+    
+    # Find IP addresses in the line and increment their count in the hash
+    while ($line =~ m/\b(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\b/g) {
+        $ip_hash{$1}++;
+    }
+}
+
+# Close the file
+close($fh);
+
+# Identify and print the most common IP address
+my $most_common_ip;
+my $most_common_ip_count = 0;
+while (my ($ip, $count) = each %ip_hash) {
+    if ($count > $most_common_ip_count) {
+        $most_common_ip_count = $count;
+        $most_common_ip = $ip;
+    }
+}
+
+if (defined $most_common_ip) {
+    print "Most common IP address is $most_common_ip with $most_common_ip_count occurrences\n";
+} else {
+    print "No IP addresses found\n";
+}
 
 
 

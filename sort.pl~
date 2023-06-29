@@ -40,7 +40,7 @@ foreach my $key (@sorted_keys) {
     print "$key: $value\n";
 }
 
-# sort by value
+
 
 #!/usr/bin/perl
 
