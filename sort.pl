@@ -23,7 +23,33 @@ my @sorted_desc = sort { $b <=> $a } @unsorted;
 # Print the array after sorting in descending order
 print "Sorted array (descending): @sorted_desc\n";
 
+my %hash = (
+    "apple"  => 3,
+    "banana" => 1,
+    "cherry" => 2,
+    "durian" => 5,
+    "elderberry" => 4,
+    "fig" => 6,
+);
 
+my @sorted_keys = sort { $hash{$a} <=> $hash{$b} } keys %hash;
+
+# Get the top 5
+@sorted_keys = splice(@sorted_keys, 0, 5);
+
+foreach my $key (@sorted_keys) {
+    print "$key: $hash{$key}\n";
+}
+
+my %hash = (
+    "apple"  => 3,
+    "banana" => 1,
+    "cherry" => 2,
+);
+
+foreach my $key (sort { $hash{$a} <=> $hash{$b} } keys %hash) {
+    print "$key: $hash{$key}\n";
+}
 
 my %hash = (
     John   => 25,
