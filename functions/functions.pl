@@ -2,6 +2,22 @@
 use strict;
 use warnings;
 
+sub sum {
+    my $first = shift;
+    my $second = shift;
+    return $first + $second;
+}
+
+print sum(3, 4);  # Prints 7
+
+sub sum {
+    my ($first, $second) = @_;
+    return $first + $second;
+}
+
+print sum(3, 4);  # Prints 7
+
+
 # This is a basic subroutine that prints a greeting.
 # Note: In Perl, arguments to a subroutine are passed via the special array @_
 sub greet {
