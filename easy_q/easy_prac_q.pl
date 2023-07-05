@@ -1,5 +1,3 @@
-# Open file and count the total and individual words
-
 # Use regex to count occurence of a words: cat, catz, dog
 
 # Write a script that reads a file and counts the number of lines, words, and characters.
@@ -7,6 +5,10 @@
 
 # Given a server log file, write a script that identifies and prints the most common IP address.
 
+# Script to traverse file system and look for files with duplicate content (files could have the
+# same name tho)
+
+# Script to deploy app on multiple servers with diff os, ensure dependecies are all there
 
 
 # Open file and count the total and individual words
@@ -127,8 +129,34 @@ if (defined $most_common_ip) {
     print "No IP addresses found\n";
 }
 
+# comparing contents of files
 
+#!/usr/bin/perl
+use strict;
+use warnings;
+use Digest::MD5;
+use File::Find;
 
+my %files;
+my $start_dir = '/path/to/start/dir';  # Change this to your starting directory
+
+find(sub {
+    return if -d;   # Skip directories
+
+    open my $fh, '<', $_ or return;
+    binmode $fh;
+    
+    my $digest = Digest::MD5->new->addfile($fh)->hexdigest;
+    push @{$files{$digest}}, $File::Find::name;
+
+}, $start_dir);
+
+foreach my $digest (keys %files) {
+    if (@{$files{$digest}} > 1) {
+        print "Duplicates files for $digest found:\n";
+        print "$_\n" for @{$files{$digest}};
+    }
+}
 
 
 
