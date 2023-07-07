@@ -1,4 +1,5 @@
 # Use regex to count occurence of a words: cat, catz, dog
+# and output to a new file named 'petz.txt'
 
 # Write a script that reads a file and counts the number of lines, words, and characters.
 # Similar to the Unix 'wc' command.
@@ -56,29 +57,36 @@
 
 # Use regex to count occurence of a words: cat, catz, dog
 
-        # Open the file
-        open(my $fh, '<', 'file.txt') or die "Could not open file 'file.txt' $!";
-        
-        my $count_cat = 0;
-        my $count_dog = 0;
-        
-        # Read through the file line by line
-        while (my $line = <$fh>) {
-            # Count occurrences of 'cat' and 'dog'
-            while ($line =~ m/\b(catz?|dog)\b/gi) {
-                if ($1 =~ m/\bcatz?\b/gi) {
-                    $count_cat++;
-                } elsif ($1 =~ m/\bdog\b/gi) {
-                    $count_dog++;
-                }
-            }
-        }
-        
-        print "Count of 'cat' or 'catz': $count_cat\n";
-        print "Count of 'dog': $count_dog\n";
-        
-        # Don't forget to close the file
-        close($fh);
+	#!/usr/bin/perl
+	use strict;
+	use warnings;
+
+	my %pm;
+	my $results = 'petz.txt';
+
+	# Open the file for reading
+	open(my $rf, '<', 'animals.txt') or die "Could not open animals.txt: $!";
+
+	# Open the file for writing
+	open(my $wf, '>', $results) or die "Could not open $results: $!";
+
+	# Read lines from the file
+	while (my $line = <$rf>) {
+	    chomp $line;
+	    # Search for occurrences of cat, dog, or catz
+	    while ($line =~ m/\b(cat|dog|catz)\b/g) {
+		$pm{$1}++;
+	    }
+	}
+
+	# Write the results to the output file
+	foreach my $key (keys %pm) {
+	    print $wf "$key: $pm{$key}\n";
+	}
+
+	# Close the file handles
+	close $rf;
+	close $wf;
 
 
 
