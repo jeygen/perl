@@ -12,4 +12,3 @@
 # same name tho)
 
 # Script to deploy app on multiple servers with diff os, ensure dependecies are all there
-
