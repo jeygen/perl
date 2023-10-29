@@ -1,0 +1,11 @@
+# research packages like File and CSV and make more q
+
+# make some sub function related q
+
+# don't need to focus on OO concept as much
+
+# sorting/looping arrays, hashtables
+
+# regex
+
+# handling files
