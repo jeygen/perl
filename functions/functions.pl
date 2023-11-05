@@ -60,3 +60,24 @@ my @values = (5, 9, 2, 8, 1);
 my ($min, $max) = min_max(@values);
 print "The minimum and maximum of @values are $min and $max, respectively\n";
 
+sub bs {
+    my @sorted_array = @{shift @_}; # how to get array itself
+    my $target = shift;
+    my $l = 0;
+    my $r = scalar @sorted_array - 1;
+    my $mid = -1;
+
+    while ($l <= $r) {
+        $mid = $l + int(($r - $l) / 2); # integer division
+        if ($target eq $sorted_array[$mid]) {
+            return 1;
+        }
+        if ($target < $sorted_array[$mid]) {
+            $r = $mid - 1;
+        } else {
+            $l = $mid + 1;
+        }
+    }
+
+    return 0;
+}
